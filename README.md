@@ -1,12 +1,30 @@
 # Neovim-Config
 My custom Neovim config based on NvChad. Do please use this a base for any projects you might have
 
-## Dependencies
+## Dependencies 
 All of these are based on Arch Linx For windows see the windows branch
 1. [Nerd Fonts](https://www.nerdfonts.com/font-downloads)
 2. Clangd and Zip  `sudo pacman -S clangd && zip`
 
-## PLugins
+## Install 
+1. Install Using the command listed for your OS
+    For Linux and Mac
+
+    `git clone -b v2.0 https://github.com/Fhasaj/Neovim-Config ~/.config/nvim --depth 1 && nvim`
+
+    For Windows (POWERSHELL)
+
+    `git clone -b Windows https://github.com/Fhasaj/Neovim-Config $ENV:USERPROFILE\AppData\Local\nvim --depth 1 && nvim`
+
+    For Windows (CMD)
+
+    `git clone -b Windows https://github.com/Fhasaj/Neovim-Config %USERPROFILE%\AppData\Local\nvim --depth 1 && nvim`
+
+2. Once Neovim is opened you might need to hit  SHIFT + U to update repo and then SHIFT + I to install. Once you have done that on your keyboard hit q and then :q to quite Neovim. 
+3. Open neovim again and then type :MasonInstallAll this will install all the LSP that are needed to autocomple and syntax highlighting.
+4. Enjoy 😄
+
+## Plugins
 1. Many beautiful themes, theme toggler by our base46 plugin
 2. Lightweight & performant ui plugin with NvChad UI It provides statusline modules, tabufline ( tabs + buffer manager) , beautiful cheatsheets, NvChad updater, hide & unhide terminal buffers, theme switcher and much more!
 3. File navigation with nvim-tree.lua
