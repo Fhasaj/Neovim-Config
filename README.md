@@ -10,7 +10,7 @@ All of these are based on Arch Linx For windows see the windows branch
 1. Install Using the command listed for your OS
     For Linux and Mac
 
-    `git clone -b v2.0 https://github.com/Fhasaj/Neovim-Config ~/.config/nvim --depth 1 && nvim`
+    `git clone https://github.com/Fhasaj/Neovim-Config ~/.config/nvim --depth 1 && nvim`
 
     For Windows (POWERSHELL)
 
