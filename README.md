@@ -14,7 +14,7 @@ All of these are based on Arch Linx For windows see the windows branch
 
     For Windows (POWERSHELL)
 
-    `git clone -b Windows https://github.com/Fhasaj/Neovim-Config $ENV:USERPROFILE\AppData\Local\nvim --depth 1 && nvim`
+    `git clone -b Windows https://github.com/Fhasaj/Neovim-Config "$ENV:USERPROFILE\AppData\Local\nvim" --depth 1 && nvim`
 
     For Windows (CMD)
 
