@@ -1,19 +1,19 @@
-return {
-  {
-    "sainnhe/everforest",
-    lazy = false, -- Set to false to load it immediately
-    priority = 1000, -- Give it a high priority to load before other plugins
-    config = function()
-      -- Optional: Configure Everforest
-      -- For example, to enable italic comments or set the background contrast:
-      vim.g.everforest_enable_italic = true
-      vim.g.everforest_background = 'medium' -- or 'hard', 'soft'
+return {}
+--   {
+--     "sainnhe/everforest",
+--     lazy = false, -- Set to false to load it immediately
+--     priority = 1000, -- Give it a high priority to load before other plugins
+--     config = function()
+--       -- Optional: Configure Everforest
+--       -- For example, to enable italic comments or set the background contrast:
+--       vim.g.everforest_enable_italic = true
+--       vim.g.everforest_background = 'medium' -- or 'hard', 'soft'
 
-      -- Set the colorscheme
-      vim.cmd.colorscheme("everforest")
-    end,
-  },
-}
+--       -- Set the colorscheme
+--       vim.cmd.colorscheme("everforest")
+--     end,
+--   },
+-- }
 
 -- return {
 --   "catppuccin/nvim",
