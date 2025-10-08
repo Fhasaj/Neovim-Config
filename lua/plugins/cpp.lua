@@ -166,56 +166,59 @@ return {
   },
 
 -- ---------- Debugging ----------
-{
-  "mfussenegger/nvim-dap",
-  dependencies = {
-    "jay-babu/mason-nvim-dap.nvim",
-    { "rcarriga/nvim-dap-ui", dependencies = { "nvim-neotest/nvim-nio" } }, -- <-- required
-  },
-  config = function()
-    require("mason-nvim-dap").setup({
-      ensure_installed = { "codelldb" },  -- set to {} if you don't want auto-install on Windows
-      automatic_setup = true,
-    })
-
-    local dap, dapui = require("dap"), require("dapui")
-    dapui.setup()
-
-    dap.listeners.after.event_initialized["dapui"] = function() dapui.open() end
-    dap.listeners.before.event_terminated["dapui"] = function() dapui.close() end
-    dap.listeners.before.event_exited["dapui"] = function() dapui.close() end
-
-    -- your keymaps & fallback configs unchanged...
-    vim.keymap.set("n", "<F9>", dap.continue, { desc = "Debug: Start/Continue" })
-    vim.keymap.set("n", "<F8>", dap.step_over, { desc = "Debug: Step Over" })
-    vim.keymap.set("n", "<F7>", dap.step_into, { desc = "Debug: Step Into" })
-    vim.keymap.set("n", "<S-F8>", dap.step_out, { desc = "Debug: Step Out" })
-    vim.keymap.set("n", "<F5>", dap.toggle_breakpoint, { desc = "Debug: Toggle Breakpoint" })
-    vim.keymap.set("n", "<A-F9>", function()
-      require("dap").set_breakpoint(vim.fn.input("Condition: "))
-    end, { desc = "Debug: Conditional Breakpoint" })
-
-    -- fallback adapter config remains the same...
-    local is_win = (vim.fn.has("win32") == 1) or ((vim.loop.os_uname().sysname or ""):match("Windows"))
-    local sep = (is_win and "\\" or "/")
-    require("dap").configurations.cpp = require("dap").configurations.cpp or {
-      {
-        name = "Launch file",
-        type = "codelldb",
-        request = "launch",
-        program = function()
-          return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. sep .. "build" .. sep, "file")
-        end,
-        cwd = "${workspaceFolder}",
-        stopOnEntry = false,
-        args = {},
-        runInTerminal = true,
-      },
-    }
-    require("dap").configurations.c = require("dap").configurations.cpp
-    require("dap").configurations.rust = require("dap").configurations.cpp
-  end,
-},
+-- {
+--   "mfussenegger/nvim-dap",
+--   dependencies = {
+--     "jay-babu/mason-nvim-dap.nvim",
+--     { "rcarriga/nvim-dap-ui", dependencies = { "nvim-neotest/nvim-nio" } }, -- <-- required
+--   },
+--   config = function()
+--     require("mason-nvim-dap").setup({
+--       ensure_installed = { "codelldb" },  -- set to {} if you don't want auto-install on Windows
+--       automatic_setup = true,
+--     })
+--
+--     local dap, dapui = require("dap"), require("dapui")
+--     dapui.setup()
+--
+--     dap.listeners.after.event_initialized["dapui"] = function() dapui.open() end
+--     dap.listeners.before.event_terminated["dapui"] = function() dapui.close() end
+--     dap.listeners.before.event_exited["dapui"] = function() dapui.close() end
+--
+--     -- your keymaps & fallback configs unchanged...
+--     vim.keymap.set("n", "<F9>", dap.continue, { desc = "Debug: Start/Continue" })
+--     vim.keymap.set("n", "<F8>", dap.step_over, { desc = "Debug: Step Over" })
+--     vim.keymap.set("n", "<F7>", dap.step_into, { desc = "Debug: Step Into" })
+--     vim.keymap.set("n", "<S-F8>", dap.step_out, { desc = "Debug: Step Out" })
+--     vim.keymap.set("n", "<F5>", dap.toggle_breakpoint, { desc = "Debug: Toggle Breakpoint" })
+--     vim.keymap.set("n", "<A-F9>", function()
+--              vim.keymap.set("n", "<A-/>", require("Comment.api").toggle.linewise.current, { silent = true })
+--         vim.keymap.set("v", "<A-/>", function()
+--         require("Comment.api").toggle.linewise(vim.fn.visualmode())
+--         end, { silent = true }) require("dap").set_breakpoint(vim.fn.input("Condition: "))
+--     end, { desc = "Debug: Conditional Breakpoint" })
+--
+--     -- fallback adapter config remains the same...
+--     local is_win = (vim.fn.has("win32") == 1) or ((vim.loop.os_uname().sysname or ""):match("Windows"))
+--     local sep = (is_win and "\\" or "/")
+--     require("dap").configurations.cpp = require("dap").configurations.cpp or {
+--       {
+--         name = "Launch file",
+--         type = "codelldb",
+--         request = "launch",
+--         program = function()
+--           return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. sep .. "build" .. sep, "file")
+--         end,
+--         cwd = "${workspaceFolder}",
+--         stopOnEntry = false,
+--         args = {},
+--         runInTerminal = true,
+--       },
+--     }
+--     require("dap").configurations.c = require("dap").configurations.cpp
+--     require("dap").configurations.rust = require("dap").configurations.cpp
+--   end,
+-- },
 
 
 -- ---------- CMake ----------
@@ -292,19 +295,4 @@ return {
     },
   },
 
-  -- ---------- Problems & Outline ----------
-  {
-    "folke/trouble.nvim",
-    opts = { use_diagnostic_signs = true },
-    keys = {
-      { "<F12>", "<cmd>Trouble diagnostics toggle<CR>", desc = "Problems (Diagnostics List)" },
-    },
-  },
-  {
-    "stevearc/aerial.nvim",
-    opts = {},
-    keys = {
-      { "<A-7>", "<cmd>AerialToggle!<CR>", desc = "Toggle Outline" },
-    },
-  },
 }
