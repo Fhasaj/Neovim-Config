@@ -1,13 +1,13 @@
+-- lua/plugins/mason.lua
 return {
   {
     "mason-org/mason-lspconfig.nvim",
     opts = {
       ensure_installed = {
-        "dartls",
         "clangd",
         "cmake",
         "gopls",
-        "tsserver",
+        "ts_ls",       -- was "tsserver"
         "tailwindcss",
       },
     },
