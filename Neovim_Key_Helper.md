@@ -22,8 +22,8 @@ This guide shows **exactly** what keys to press — no symbols, just real keys.
 |---------|------------|----------------|
 | Enter insert mode | `i` | Press **i** |
 | Append at end of line | `A` | Hold **Shift**, press **a** |
-| Undo | `u` | Press **u** |
-| Redo | `<C-r>` | Hold **Ctrl**, press **r** |
+| Undo | `u` / `<C-z>` | Press **u** OR hold **Ctrl**, press **z** |
+| Redo | `<C-r>` / `<C-y>` | Hold **Ctrl**, press **r** OR hold **Ctrl**, press **y** |
 | Copy | `<C-c>` | Hold **Ctrl**, press **c** |
 | Cut | `<C-x>` | Hold **Ctrl**, press **x** |
 | Paste | `<C-v>` | Hold **Ctrl**, press **v** |
@@ -41,13 +41,14 @@ This guide shows **exactly** what keys to press — no symbols, just real keys.
 |---------|------------|----------------|
 | Split window horizontally | `<leader>-` | Press **Space**, then **-** |
 | Split window vertically | `<leader>|` | Press **Space**, then **Shift + \\** |
+| Split window horizontally (direct) | `<C-->` | Hold **Ctrl**, press **-** |
+| Split window vertically (direct) | `<C-\>` | Hold **Ctrl**, press **\** |
 | Move between splits | `<C-h/j/k/l>` | Hold **Ctrl**, press **h**, **j**, **k**, or **l** |
 | Resize split | `<C-Arrow keys>` | Hold **Ctrl**, then press an arrow key |
 | Open file explorer | `<leader>e` | Press **Space**, then **e** |
 | Close current window | `<leader>wd` | Press **Space**, then **w**, then **d** |
 | Switch buffer | `<S-h>` / `<S-l>` | Hold **Shift**, press **h** (previous) or **l** (next) |
 | Delete buffer | `<leader>bd` | Press **Space**, then **b**, then **d** |
-
 ---
 
 ## 🔹 File Management
@@ -58,20 +59,35 @@ This guide shows **exactly** what keys to press — no symbols, just real keys.
 | Save & Quit | `:wq` | Type **:wq** then press **Enter** |
 | Quit without saving | `:q!` | Type **:q!** then press **Enter** |
 | Open file finder | `<leader>ff` | Press **Space**, then **f**, then **f** |
+| Open file finder (Telescope) | `<C-p>` | Hold **Ctrl**, press **p** |
 | Search text (grep) | `<leader>/` | Press **Space**, then **/** |
+| Search in files (Telescope live grep) | `<C-f>` | Hold **Ctrl**, press **f** |
 | Recent files | `<leader>fr` | Press **Space**, then **f**, then **r** |
+---
+
 
 ---
+
+
+## 🔹 Terminal & Tabs
+
+| Action | Key Combo | What to Press |
+|---------|------------|----------------|
+| Toggle horizontal terminal | `<C-`>` | Hold **Ctrl**, press **`** (backtick). If it doesn’t work in your terminal, use **Space + t + h** instead |
+| Terminal → normal mode | `Esc` (in terminal) | While the cursor is inside the terminal, press **Escape** |
+| New tab | `<C-t>` | Hold **Ctrl**, press **t** |
+| Close tab | `<leader>tc` | Press **Space**, then **t**, then **c** |
+| Next / Previous tab | `gt` / `gT` | Press **g**, then **t** for next; press **g**, then **Shift + t** for previous |
 
 ## 🔹 Commenting (Comment.nvim)
 
 | Action | Key Combo | What to Press |
 |---------|------------|----------------|
+| Toggle comment (line / selection) | `<C-_>` | Hold **Ctrl**, press **/** (this is sent as Ctrl+underscore in Neovim) |
 | Toggle line comment | `<leader>c/` | Press **Space**, then **c**, then **/** |
 | Toggle block comment | `gbc` | Press **g**, then **b**, then **c** |
 | Comment selected text | Visual select → `gc` | Select text, then press **g**, then **c** |
 | Comment below / above | `gco` / `gcO` | Press **g**, then **c**, then **o** (or **Shift + o**) |
-
 ---
 
 ## 🔹 Troubleshooting / Diagnostics (Trouble.nvim)
@@ -144,7 +160,7 @@ This guide shows **exactly** what keys to press — no symbols, just real keys.
 |----------------------|-------------|
 | Save | **Ctrl + S** |
 | Quit | **:q** or **:wq** |
-| Comment line | **Space + c + /** |
+| Comment line | **Ctrl + /** (or **Space + c + /**) |
 | Open file finder | **Space + f + f** |
 | Open diagnostics (Trouble) | **F12** |
 | Build (CMake) | **Space + m + b** |
