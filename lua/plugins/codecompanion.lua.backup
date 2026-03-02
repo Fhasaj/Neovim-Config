@@ -1,0 +1,56 @@
+return {
+    "olimorris/codecompanion.nvim",
+    dependencies = {
+        "nvim-lua/plenary.nvim",
+        "nvim-treesitter/nvim-treesitter",
+    },
+    config = function()
+    require("codecompanion").setup({
+        adapters = {
+            ollama = function()
+            return require("codecompanion.adapters").extend("ollama", {
+                schema = {
+                    model = {
+                        default = "deepseek-r1:14b-qwen-distill-q4_K_M",
+                    },
+                },
+            })
+            end,
+        },
+        strategies = {
+            chat = { adapter = "ollama" },
+            inline = { adapter = "ollama" },
+        },
+        display = {
+            chat = {
+                window = {
+                    layout = "vertical",
+                    width = 0.4,
+                },
+            },
+            inline = {
+                diff = {
+                    enabled = true,
+                },
+            },
+        },
+    })
+    end,
+    keys = {
+        -- Chat
+        { "<leader>zz", "<cmd>CodeCompanionChat Toggle<cr>", mode = { "n", "v" }, desc = "AI Chat Toggle" },
+        { "<leader>za", "<cmd>CodeCompanionActions<cr>", mode = { "n", "v" }, desc = "AI Actions" },
+        { "<leader>zc", "<cmd>CodeCompanionChat Add<cr>", mode = "v", desc = "Add to Chat" },
+
+        -- Inline editing
+        { "<leader>ze", "<cmd>CodeCompanion<cr>", mode = "v", desc = "AI Edit" },
+        { "<leader>zf", "<cmd>CodeCompanion /fix<cr>", mode = "v", desc = "AI Fix" },
+        { "<leader>zr", "<cmd>CodeCompanion /refactor<cr>", mode = "v", desc = "AI Refactor" },
+        { "<leader>zx", "<cmd>CodeCompanion /explain<cr>", mode = "v", desc = "AI Explain" },
+        { "<leader>zd", "<cmd>CodeCompanion /doc<cr>", mode = "v", desc = "AI Docstring" },
+        { "<leader>zt", "<cmd>CodeCompanion /tests<cr>", mode = "v", desc = "AI Tests" },
+
+        -- Quick prompt
+        { "<leader>zi", ":CodeCompanion ", mode = "v", desc = "AI Inline Prompt" },
+    },
+}

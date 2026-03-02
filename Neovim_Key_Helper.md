@@ -143,6 +143,25 @@ This guide shows **exactly** what keys to press — no symbols, just real keys.
 
 ---
 
+
+## 🔹 AI Code Assistant (CodeCompanion)
+
+| Action | Key Combo | What to Press |
+|---------|------------|----------------|
+| Toggle AI chat | `<leader>zz` | Press **Space**, then **z**, then **z** |
+| AI actions menu | `<leader>za` | Press **Space**, then **z**, then **a** |
+| Add selection to chat | `<leader>zc` | Select code, then **Space**, **z**, **c** |
+| AI edit selection | `<leader>ze` | Select code, then **Space**, **z**, **e** |
+| AI fix code | `<leader>zf` | Select code, then **Space**, **z**, **f** |
+| AI refactor | `<leader>zr` | Select code, then **Space**, **z**, **r** |
+| AI explain | `<leader>zx` | Select code, then **Space**, **z**, **x** |
+| AI add docstring | `<leader>zd` | Select code, then **Space**, **z**, **d** |
+| AI generate tests | `<leader>zt` | Select code, then **Space**, **z**, **t** |
+| AI custom prompt | `<leader>zi` | Select code, then **Space**, **z**, **i**, type instruction |
+
+---
+
+
 ## 🔹 LazyVim UI Toggles
 
 | Action | Key Combo | What to Press |
