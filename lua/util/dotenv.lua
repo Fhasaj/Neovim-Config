@@ -70,6 +70,25 @@ function M.merged(dir)
   return env
 end
 
+-- These services are cobra CLIs: the bare binary prints help and exits 0.
+-- Detect a `serve` subcommand so run/debug actually start the server rather
+-- than looking like the debugger silently did nothing.
+function M.serve_args(dir)
+  local cmd = dir .. "/cmd/server"
+  if not vim.uv.fs_stat(cmd) then return {} end
+  for name, t in vim.fs.dir(cmd) do
+    if t == "file" and name:match("%.go$") then
+      local f = io.open(cmd .. "/" .. name, "r")
+      if f then
+        local body = f:read("*a")
+        f:close()
+        if body:match('Use:%s*"serve"') then return { "serve" } end
+      end
+    end
+  end
+  return {}
+end
+
 -- Backend root = the directory holding the service checkouts.
 function M.backend_root()
   local marker = vim.fs.find({ "skypin-infra" }, { upward = true, path = vim.fn.getcwd(), type = "directory" })

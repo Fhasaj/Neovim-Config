@@ -131,6 +131,7 @@ return {
             request = "launch",
             program = function() return dotenv.service_root() .. "/cmd/server" end,
             cwd = function() return dotenv.service_root() end,
+            args = function() return dotenv.serve_args(dotenv.service_root()) end,
             env = env_for_current_buffer,
           },
           {
