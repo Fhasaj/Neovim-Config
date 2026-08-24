@@ -3,6 +3,9 @@
 return {
   "mfussenegger/nvim-dap",
   event = "VeryLazy",
+  -- Loaded *with* dap, not on their own keymaps: both register dap.listeners at
+  -- config time, and a session that starts before they load gets no UI at all.
+  dependencies = { "rcarriga/nvim-dap-ui", "theHamsta/nvim-dap-virtual-text" },
   config = function()
     -- `go install` puts dlv in ~/go/bin, which is not on the login PATH.
     local gobin = vim.fn.expand("~/go/bin")
@@ -81,7 +84,8 @@ return {
     -- Resolved at launch time so it always reads the current service's env file.
     local function env_for_current_buffer()
       local root = dotenv.service_root()
-      local env, path = dotenv.load(root)
+      local path = dotenv.find(root)
+      local env = dotenv.merged(root)
       if not path then
         vim.notify(("no env file in %s (looked for %s)"):format(root, table.concat(dotenv.candidates, ", ")), vim.log.levels.WARN)
       else
@@ -93,6 +97,25 @@ return {
     vim.api.nvim_create_autocmd("FileType", {
       pattern = "go",
       callback = function()
+        -- Backend/ holds four independent modules and has no go.mod of its own.
+        -- dlv runs `go build` in the directory it was *spawned* in -- nvim's cwd --
+        -- not in the launch config's `cwd`, so opening nvim at Backend/ makes every
+        -- Go config die with "go.mod file not found". Spawn dlv inside the module
+        -- that owns the current file instead. Set here, after nvim-dap-go's setup.
+        dap.adapters.go = function(callback, config)
+          callback({
+            type = "server",
+            port = "${port}",
+            executable = {
+              command = vim.fn.exepath("dlv"),
+              args = { "dap", "-l", "127.0.0.1:${port}" },
+              -- NOTE: `cwd` sits directly on `executable` for server adapters.
+              -- Nesting it under `options` (the executable-adapter shape) is ignored.
+              cwd = config.cwd and config.cwd ~= "" and config.cwd or dotenv.service_root(),
+            },
+          })
+        end
+
         dap.configurations.go = dap.configurations.go or {}
         local seen = {}
         for _, c in ipairs(dap.configurations.go) do

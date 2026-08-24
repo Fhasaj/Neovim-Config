@@ -58,6 +58,18 @@ function M.load(dir)
   return path and M.parse(path) or {}, path
 end
 
+-- Env file values layered *over* the inherited environment, the way GoLand's
+-- EnvFile plugin behaves. Required for dap: dlv builds the binary with the
+-- launch environment, so dropping HOME/GOMODCACHE/PATH breaks `go build`
+-- before the debugger ever starts.
+function M.merged(dir)
+  local env = vim.fn.environ()
+  for k, v in pairs(M.load(dir)) do
+    env[k] = v
+  end
+  return env
+end
+
 -- Backend root = the directory holding the service checkouts.
 function M.backend_root()
   local marker = vim.fs.find({ "skypin-infra" }, { upward = true, path = vim.fn.getcwd(), type = "directory" })
