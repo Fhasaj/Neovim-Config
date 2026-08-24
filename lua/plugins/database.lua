@@ -27,7 +27,7 @@ return {
         local env = dotenv.load(svc.dir)
         -- Identical URLs across services are de-duplicated by `seen`.
         add(svc.name .. " · postgres", env.DATABASE_URL)
-        add(svc.name .. " · redis", env.REDIS_URL)
+        add(svc.name .. " · redis", dotenv.normalize_redis_url(env.REDIS_URL))
       end
 
       if #dbs > 0 then

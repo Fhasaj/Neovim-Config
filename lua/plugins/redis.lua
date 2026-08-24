@@ -15,7 +15,7 @@ return {
           end
           local dotenv = require("util.dotenv")
           local env = dotenv.load(dotenv.service_root())
-          local url = env.REDIS_URL
+          local url = dotenv.normalize_redis_url(env.REDIS_URL)
           if not url then
             vim.notify("no REDIS_URL in this service's env file", vim.log.levels.ERROR)
             return

@@ -89,6 +89,14 @@ function M.serve_args(dir)
   return {}
 end
 
+-- valkey-cli and dadbod's redis adapter reject `redis://:pass@host` -- the empty
+-- username is sent literally and the server answers WRONGPASS. go-redis accepts
+-- it, which is why the services connect but the CLI/GUI do not. Name the user.
+function M.normalize_redis_url(url)
+  if not url or url == "" then return url end
+  return (url:gsub("^(rediss?://):", "%1default:"))
+end
+
 -- Backend root = the directory holding the service checkouts.
 function M.backend_root()
   local marker = vim.fs.find({ "skypin-infra" }, { upward = true, path = vim.fn.getcwd(), type = "directory" })
