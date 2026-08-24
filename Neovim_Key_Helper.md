@@ -105,21 +105,92 @@ This guide shows **exactly** what keys to press — no symbols, just real keys.
 
 ## 🔹 CMake Tools (for C++ Projects)
 
+> ⚠️ These keys live under `<leader>c*`, the same prefix as clangd's LSP keys and CodeCompanion. Outside a `.cpp`/`.h` buffer (e.g. a `CMakeLists.txt`), the table below applies. Inside a C/C++ buffer, `<leader>cr`/`<leader>cd` are shadowed by clangd's buffer-local **Find References** / **Go to Definition** — see the C/C++ (clangd) section below for those.
+
 | Action | Key Combo | What to Press |
 |---------|------------|----------------|
-| Configure CMake project | `<leader>mc` | Press **Space**, then **m**, then **c** |
-| Build current target | `<leader>mb` | Press **Space**, then **m**, then **b** |
-| Select build target | `<leader>mt` | Press **Space**, then **m**, then **t** |
-| Run target | `<leader>mr` | Press **Space**, then **m**, then **r** |
-| Debug target | `<leader>md` | Press **Space**, then **m**, then **d** |
+| Configure CMake project | `<leader>cm` | Press **Space**, then **c**, then **m** |
+| Select target & build | `<leader>cb` | Press **Space**, then **c**, then **b** |
+| Select target & run | `<leader>cr` | Press **Space**, then **c**, then **r** |
+| Select target & debug | `<leader>cd` | Press **Space**, then **c**, then **d** |
+| Select build target only | `<leader>ct` | Press **Space**, then **c**, then **t** |
+| Clean build | `<leader>cc` | Press **Space**, then **c**, then **c** |
 
 ---
 
-## 🔹 Debugging (nvim-dap + dap-ui)
+## 🔹 C/C++ (clangd) — buffer-local LSP keys
+
+These only apply while your cursor is in a `.c`/`.h`/`.cpp`/`.hpp` buffer (set in `lua/plugins/cpp.lua`); they override the generic LSP keys below and the CMake keys above for the same buffer.
 
 | Action | Key Combo | What to Press |
 |---------|------------|----------------|
-| Start / Continue | `<F5>` | Press **F5** |
+| Go to definition | `<C-b>` | Hold **Ctrl**, press **b** |
+| Go to definition (alt) | `<leader>cd` | Press **Space**, then **c**, then **d** |
+| Find references / usages | `<A-F7>` | Hold **Alt**, press **F7** |
+| Find references (alt) | `<leader>cr` | Press **Space**, then **c**, then **r** |
+| Rename symbol | `<S-F6>` | Hold **Shift**, press **F6** |
+| Rename symbol (alt) | `<leader>cn` | Press **Space**, then **c**, then **n** |
+| Quick fix / code action | `<A-CR>` | Hold **Alt**, press **Enter** |
+| Quick fix (alt) | `<leader>ca` | Press **Space**, then **c**, then **a** |
+| Hover docs | `K` | Press **Shift + k** |
+| Switch header ↔ source | `<leader>oh` | Press **Space**, then **o**, then **h** |
+
+---
+
+## 🔹 Go (vim-go)
+
+Build/run/test helpers from `fatih/vim-go` (`lua/plugins/golang.lua`); gopls handles completion/diagnostics/formatting separately.
+
+| Action | Key Combo | What to Press |
+|---------|------------|----------------|
+| Run current file/package | `<leader>gr` | Press **Space**, then **g**, then **r** |
+| Build | `<leader>gb` | Press **Space**, then **g**, then **b** |
+| Run all tests in file | `<leader>gt` | Press **Space**, then **g**, then **t** |
+| Run test under cursor | `<leader>gtf` | Press **Space**, then **g**, then **t**, then **f** |
+| Toggle coverage overlay | `<leader>gc` | Press **Space**, then **g**, then **c** |
+| Jump to alternate file (test ↔ impl) | `<leader>ga` | Press **Space**, then **g**, then **a** |
+| Run goimports | `<leader>gi` | Press **Space**, then **g**, then **i** |
+| Fill struct literal | `<leader>gs` | Press **Space**, then **g**, then **s** |
+| Insert `if err != nil` | `<leader>ge` | Press **Space**, then **g**, then **e** |
+| Show GoDoc | `<leader>gd` | Press **Space**, then **g**, then **d** |
+| Go to definition (vim-go) | `<leader>gv` | Press **Space**, then **g**, then **v** |
+
+### 🐞 Go Debugging (nvim-dap + `.env` support)
+
+Uses the standard DAP keys below. When you press **F5** in a `.go` file, since more than one Go configuration is registered, Neovim shows a picker — pick the one you need:
+
+| Configuration in picker | What it does |
+|---------|----------------|
+| **Debug** | Debug current file, no extra environment injected |
+| **Debug (.env)** | Debug current file with variables from the nearest `.env` injected |
+| **Debug package (.env)** | Debug the package containing the current file, with `.env` injected |
+| **Debug test (.env)** | `dlv test` the current package, with `.env` injected |
+
+The `.env` lookup walks upward from the debugged file to the nearest `go.mod`/`.git`. See [`README.md`](./README.md#-go-debugging-with-env-files) for details.
+
+---
+
+## 🔹 Flutter / Dart (flutter-tools.nvim)
+
+No custom leader keys are bound for Flutter — use these commands directly (type `:` then the command, press **Enter**). DAP debugging (`<F5>`, breakpoints, etc. — see below) works automatically once a Flutter app is running.
+
+| Action | Command |
+|---------|----------------|
+| Run the app | `:FlutterRun` |
+| Hot reload | `:FlutterHotReload` |
+| Hot restart | `:FlutterHotRestart` |
+| Pick a device | `:FlutterDevices` |
+| Open dev log | `:FlutterLogClear` then `:FlutterLogToggle` |
+| Quit the running app | `:FlutterQuit` |
+| Toggle widget outline guides | Enabled by default (`widget_guides.enabled = true`) |
+
+---
+
+## 🔹 Debugging (nvim-dap + dap-ui) — C/C++, Go, TypeScript/JavaScript, Dart
+
+| Action | Key Combo | What to Press |
+|---------|------------|----------------|
+| Start / Continue (shows config picker if more than one applies) | `<F5>` | Press **F5** |
 | Step Over | `<F10>` | Press **F10** |
 | Step Into | `<F11>` | Press **F11** |
 | Step Out | `<S-F11>` | Hold **Shift**, press **F11** |
@@ -130,42 +201,80 @@ This guide shows **exactly** what keys to press — no symbols, just real keys.
 
 ---
 
-## 🔹 LSP (Language Server)
+## 🔹 LSP (Language Server) — generic default keys
+
+Applies to any language without its own buffer-local overrides (Go, Dart, TypeScript/JavaScript). C/C++ has its own set — see the clangd section above.
 
 | Action | Key Combo | What to Press |
 |---------|------------|----------------|
 | Go to definition | `gd` | Press **g**, then **d** |
+| **Go to definition (mouse, any file)** | `<C-LeftMouse>` | Hold **Ctrl**, **left-click** a symbol — jumps to its definition, opening another file if needed |
 | Find references | `gr` | Press **g**, then **r** |
 | Show hover docs | `K` | Press **Shift + k** |
 | Rename symbol | `<leader>cr` | Press **Space**, then **c**, then **r** |
 | Code actions (quick fix) | `<leader>ca` | Press **Space**, then **c**, then **a** |
 | Format file | `<leader>cf` | Press **Space**, then **c**, then **f** |
 
+> Ctrl+Click works everywhere an LSP is attached — Go, TypeScript/JS, Dart, and C/C++ (clangd's `<C-b>` keeps working too). Set up in `lua/config/keymaps.lua`. If it does nothing in your terminal, the terminal emulator itself may be intercepting Ctrl+click (common for opening URLs) before it reaches Neovim — check your terminal's keybinding settings.
+
 ---
 
 
-## 🔹 AI Code Assistant (CodeCompanion)
+## 🔹 AI Code Assistant — CodeCompanion (`<leader>c*`)
+
+Chat/inline-edit assistant wired to a local Ollama model (`lua/plugins/codecompanion.lua`). Shares the `<leader>c*` prefix with clangd/CMake — see the troubleshooting note in `README.md` if a key seems to do the "wrong" thing outside a C/C++ buffer.
 
 | Action | Key Combo | What to Press |
 |---------|------------|----------------|
-| Toggle AI chat | `<leader>zz` | Press **Space**, then **z**, then **z** |
-| AI actions menu | `<leader>za` | Press **Space**, then **z**, then **a** |
-| Add selection to chat | `<leader>zc` | Select code, then **Space**, **z**, **c** |
-| AI edit selection | `<leader>ze` | Select code, then **Space**, **z**, **e** |
-| AI fix code | `<leader>zf` | Select code, then **Space**, **z**, **f** |
-| AI refactor | `<leader>zr` | Select code, then **Space**, **z**, **r** |
-| AI explain | `<leader>zx` | Select code, then **Space**, **z**, **x** |
-| AI add docstring | `<leader>zd` | Select code, then **Space**, **z**, **d** |
-| AI generate tests | `<leader>zt` | Select code, then **Space**, **z**, **t** |
-| AI custom prompt | `<leader>zi` | Select code, then **Space**, **z**, **i**, type instruction |
+| Open/toggle AI chat | `<leader>cc` | Press **Space**, then **c**, then **c** (also works on a visual selection) |
+| Close AI chat | `<leader>cq` | Press **Space**, then **c**, then **q** |
+| Inline edit selection | `<leader>ce` or `<leader>ci` | Select code, then **Space**, **c**, **e** (or **i**) |
+| Actions menu | `<leader>ca` | Press **Space**, then **c**, then **a** |
+| Code Review prompt | `<leader>cr` | Press **Space**, then **c**, then **r** |
+| Explain code prompt | `<leader>cx` | Press **Space**, then **c**, then **x** |
+| Add current buffer to chat | `<leader>cb` | Press **Space**, then **c**, then **b** |
+| Add visual selection to chat | `<leader>cb` (visual mode) | Select code, then **Space**, **c**, **b** |
+| Quick inline fix | `<leader>cf` | Select code, then **Space**, **c**, **f** |
+| Quick inline optimize | `<leader>cp` | Select code, then **Space**, **c**, **p** |
+
+> `opencode.nvim` (a second AI chat plugin) was removed — CodeCompanion above is now the only AI chat assistant, since it's already wired to a local Ollama model and there's no need for two overlapping tools.
 
 ---
 
+## 🔹 Git (gitui + gitsigns)
+
+Confirmed working: `git`, `lazygit`, and `gitui` are all available (`gitui` via Mason, on Neovim's runtime `PATH`). The `util.gitui` extra swaps LazyVim's default Lazygit keys for GitUI and drops two history keys in its favor.
+
+| Action | Key Combo | What to Press |
+|---------|------------|----------------|
+| Open GitUI (project root) | `<leader>gg` | Press **Space**, then **g**, then **g** |
+| Open GitUI (cwd) | `<leader>gG` | Press **Space**, then **g**, then **Shift + g** |
+| Git log (cwd) | `<leader>gL` | Press **Space**, then **g**, then **Shift + l** |
+| Git blame line (picker) | `<leader>gb` | Press **Space**, then **g**, then **b** |
+| Git browse (open remote) | `<leader>gB` | Press **Space**, then **g**, then **Shift + b** |
+| Copy git permalink | `<leader>gY` | Press **Space**, then **g**, then **Shift + y** |
+
+### Gitsigns hunks (in any file under git)
+
+| Action | Key Combo | What to Press |
+|---------|------------|----------------|
+| Next / previous hunk | `]h` / `[h` | Press **]**, then **h** (next) or **[**, then **h** (previous) |
+| Last / first hunk | `]H` / `[H` | Press **]**/**[**, then **Shift + h** |
+| Stage hunk | `<leader>ghs` | Press **Space**, then **g**, **h**, **s** |
+| Reset hunk | `<leader>ghr` | Press **Space**, then **g**, **h**, **r** |
+| Undo stage hunk | `<leader>ghu` | Press **Space**, then **g**, **h**, **u** |
+| Preview hunk inline | `<leader>ghp` | Press **Space**, then **g**, **h**, **p** |
+| Blame current line | `<leader>ghb` | Press **Space**, then **g**, **h**, **b** |
+| Blame whole buffer | `<leader>ghB` | Press **Space**, then **g**, **h**, **Shift + b** |
+| Select hunk (text object) | `ih` | e.g. `dih` deletes the current hunk |
+
+---
 
 ## 🔹 LazyVim UI Toggles
 
 | Action | Key Combo | What to Press |
 |---------|------------|----------------|
+| Switch theme (Themery picker) | `<leader>ut` | Press **Space**, then **u**, then **t** — see [Themes](./README.md#-themes) |
 | Toggle relative numbers | `<leader>uL` | Press **Space**, then **u**, then **Shift + l** |
 | Toggle wrap | `<leader>uw` | Press **Space**, then **u**, then **w** |
 | Clear search highlights | `<leader>ur` | Press **Space**, then **u**, then **r** |
@@ -182,12 +291,17 @@ This guide shows **exactly** what keys to press — no symbols, just real keys.
 | Comment line | **Ctrl + /** (or **Space + c + /**) |
 | Open file finder | **Space + f + f** |
 | Open diagnostics (Trouble) | **F12** |
-| Build (CMake) | **Space + m + b** |
-| Debug (CMake / DAP) | **Space + m + d** |
+| Configure CMake | **Space + c + m** |
+| Build (CMake) | **Space + c + b** |
+| Debug (CMake) | **Space + c + d** |
+| Debug (Go/C++/TS/Dart, DAP) | **F5** (then pick a config, e.g. Go's `.env` variants) |
 | Toggle breakpoint | **Space + d + b** |
 | Step / Continue | **F10** / **F5** |
 | Toggle DAP UI | **Space + d + u** |
+| AI chat (CodeCompanion, local Ollama) | **Space + c + c** |
+| Switch theme | **Space + u + t** |
+| Open GitUI | **Space + g + g** |
 
 ---
 
-Made for **LazyVim + Your Configuration (C++, Go, Dart, Node.js)**.
+Made for **LazyVim + Your Configuration (C++, Go, Dart/Flutter, TypeScript/JavaScript, Next.js/React)**.

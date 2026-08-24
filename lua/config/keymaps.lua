@@ -97,3 +97,16 @@ keymap("n", "<C-f>", "<cmd>Telescope live_grep<cr>", vim.tbl_extend("force", opt
 -- Optional: move block-visual mode to Alt+v (since <C-v> is paste)
 -----------------------------------------------------------------
 keymap("n", "<A-v>", "<C-v>", vim.tbl_extend("force", opts, { desc = "Visual block mode (moved from <C-v>)" }))
+
+-----------------------------------------------------------------
+-- Ctrl+Click on a symbol -> Go to Definition (any LSP, any file)
+-- `mouse = "a"` is already on via LazyVim defaults; this just
+-- teaches Ctrl+LeftMouse to move the cursor there first (so it
+-- works across windows/wrapped lines) and then ask the LSP.
+-----------------------------------------------------------------
+keymap("n", "<C-LeftMouse>", function()
+    vim.cmd("normal! " .. vim.api.nvim_replace_termcodes("<LeftMouse>", true, true, true))
+    vim.schedule(function()
+        vim.lsp.buf.definition()
+    end)
+end, vim.tbl_extend("force", opts, { desc = "Go to Definition (Ctrl+Click)" }))

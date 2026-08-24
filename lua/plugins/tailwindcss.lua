@@ -9,11 +9,9 @@ return {
                         "html","css","scss","javascript","javascriptreact",
                         "typescript","typescriptreact","vue","svelte"
                     },
-                    root_dir = require("lspconfig.util").root_pattern(
-                        "tailwind.config.js","tailwind.config.cjs",
-                        "tailwind.config.ts","tailwind.config.mjs",
-                        "postcss.config.js","package.json",".git"
-                    ),
+                    -- root_dir intentionally NOT overridden: the old sync `lspconfig.util.root_pattern(...)`
+                    -- silently breaks vim.lsp.enable()'s auto-attach (see lua/plugins/gopls.lua for details).
+                    -- nvim-lspconfig's bundled default already resolves tailwind/postcss config roots correctly.
                 },
             },
         },

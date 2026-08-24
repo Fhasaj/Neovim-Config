@@ -197,112 +197,171 @@ Install at least:
 
 ## Plugins
 
-Below is a list of all the plugins currently installed to match my workflow (C++, Go, Dart, Node/TS).
-*(See `lua/plugins/` for exact files.)*
+Plugin installs are managed by **lazy.nvim** and pinned in `lazy-lock.json` — that file (and `lua/plugins/*.lua`) is the source of truth, and this section is kept in sync with it. Two things feed the install list:
+
+* **LazyVim extras** enabled in [`lazyvim.json`](./lazyvim.json): `lang.clangd`, `lang.cmake`, `lang.dart`, `lang.go`, `lang.typescript`, `lang.tailwind`, `lang.json`, `lang.markdown`, `lang.git`, `lang.ember`, `ai.copilot`, `coding.yanky`, `ui.dashboard-nvim`, `util.dot`, `util.gitui`. These pull in most of the C++/Go/Dart/TypeScript language tooling automatically.
+* **Custom specs** in `lua/plugins/*.lua` — project-specific server settings, keymaps, and extra DAP configs layered on top.
+
+*(66 theme variants across ~45 colorscheme plugins, picked via `themery.nvim`, are omitted from the tables below for brevity — full list in the [Themes](#-themes) section and `lua/plugins/themery.lua`.)*
 
 ### 🧠 Core / Framework
 
 | Plugin                            | Description                                                                    |
-| --------------------------------- | ------------------------------------------------------------------------------ |
+| ---------------------------------- | --------------------------------------------------------------------------------- |
 | **`folke/lazy.nvim`**             | Plugin manager for LazyVim — controls all installs, updates, and lazy-loading. |
 | **`LazyVim/LazyVim`**             | The LazyVim base configuration (keymaps, UI, defaults).                        |
 | **`nvim-lua/plenary.nvim`**       | Utility functions used by many plugins (required dependency).                  |
-| **`nvim-tree/nvim-web-devicons`** | File icons in status lines, file explorers, etc.                               |
+| **`nvim-tree/nvim-web-devicons`** | File icons in status lines, pickers, etc.                                      |
+| **`folke/snacks.nvim`**           | LazyVim's UI/editor toolkit — picker, explorer, terminal, notifier, dashboard. |
+| **`folke/lazydev.nvim`**          | Better Lua LSP experience when editing this Neovim config itself.              |
 
 ### 🧭 Navigation / UI / Workflow
 
-| Plugin                                                             | Description                                                           |
-| ------------------------------------------------------------------ | --------------------------------------------------------------------- |
-| **`nvim-tree/nvim-tree.lua`** or **`nvim-neo-tree/neo-tree.nvim`** | File explorer (depending on your LazyVim base).                       |
-| **`nvim-telescope/telescope.nvim`**                                | Fuzzy finder for files, symbols, buffers, grep, etc.                  |
-| **`nvim-lualine/lualine.nvim`**                                    | Statusline. LazyVim ships with this.                                  |
-| **`folke/which-key.nvim`**                                         | Popup helper showing available keybindings after pressing `<leader>`. |
-| **`stevearc/dressing.nvim`**                                       | Better-looking UI dialogs and input boxes.                            |
-| **`nvim-notify/nvim-notify`**                                      | Enhanced notifications.                                               |
-| **`lukas-reineke/indent-blankline.nvim`**                          | Indentation guides.                                                   |
-| **`echasnovski/mini.indentscope`**                                 | Optional LazyVim indent scope lines.                                  |
+| Plugin                               | Description                                                            |
+| -------------------------------------- | -------------------------------------------------------------------------- |
+| **`nvim-telescope/telescope.nvim`**  | Fuzzy finder for files, symbols, buffers, grep, etc.                   |
+| **`nvim-lualine/lualine.nvim`**      | Statusline.                                                             |
+| **`akinsho/bufferline.nvim`**        | Buffer/tab line at the top.                                             |
+| **`folke/which-key.nvim`**           | Popup helper showing available keybindings after pressing `<leader>`.  |
+| **`stevearc/dressing.nvim`**         | Better-looking UI dialogs and input boxes.                              |
+| **`folke/noice.nvim`**               | Redesigned cmdline, messages, and popups.                               |
+| **`folke/flash.nvim`**               | Fast, labeled motion jumps.                                             |
+| **`folke/persistence.nvim`**         | Session save/restore per project.                                       |
+| **`lewis6991/gitsigns.nvim`**        | Git change signs in the gutter, hunk staging/preview.                   |
+| **`MagicDuck/grug-far.nvim`**        | Project-wide find & replace UI.                                         |
+| **`nvimdev/dashboard-nvim`**         | Start screen (via `ui.dashboard-nvim` extra).                           |
+| **`kdheepak/themery.nvim`**          | Theme picker/switcher (`<leader>ut`) across all installed colorschemes — see [Themes](#-themes). |
+| **`akinsho/toggleterm.nvim`**        | Managed terminal windows (`<C-\`>`, `<leader>t*`).                      |
 
-### ⚙️ LSP / Autocompletion / Snippets
+### ⚙️ LSP / Completion / Snippets
 
-| Plugin                                                      | Description                                               |
-| ----------------------------------------------------------- | --------------------------------------------------------- |
-| **`neovim/nvim-lspconfig`**                                 | Core LSP client configuration.                            |
-| **`williamboman/mason.nvim`**                               | Installer for LSP servers, linters, formatters, and DAPs. |
-| **`williamboman/mason-lspconfig.nvim`**                     | Bridges Mason and LSPConfig.                              |
-| **`hrsh7th/nvim-cmp`**                                      | Autocompletion engine.                                    |
-| **`hrsh7th/cmp-nvim-lsp`**                                  | LSP source for completion.                                |
-| **`hrsh7th/cmp-buffer`**, **`cmp-path`**, **`cmp-cmdline`** | Extra completion sources.                                 |
-| **`L3MON4D3/LuaSnip`**                                      | Snippet engine.                                           |
-| **`saadparwaiz1/cmp_luasnip`**                              | Connects LuaSnip to nvim-cmp.                             |
-| **`rafamadriz/friendly-snippets`**                          | Collection of ready-to-use snippets.                      |
+| Plugin                                | Description                                                                          |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------- |
+| **`neovim/nvim-lspconfig`**           | Core LSP client configuration.                                                        |
+| **`mason-org/mason.nvim`**            | Installer for LSP servers, linters, formatters, and DAP adapters.                     |
+| **`mason-org/mason-lspconfig.nvim`**  | Bridges Mason and lspconfig.                                                          |
+| **`saghen/blink.cmp`**                | Primary autocompletion engine (fast, Rust-backed fuzzy matching, built-in snippets).  |
+| **`giuxtaposition/blink-copilot`**    | Copilot suggestions surfaced as blink.cmp completions.                                |
+| **`rafamadriz/friendly-snippets`**    | Collection of ready-to-use snippets, consumed by blink.cmp.                           |
+| **`zbirenbaum/copilot.lua`**          | GitHub Copilot engine (via `ai.copilot` extra).                                       |
+
+> An `nvim-cmp` stack (`hrsh7th/nvim-cmp` + `cmp-nvim-lsp`) is wired up behind `vim.g.completion_engine = "cmp"` in `lua/plugins/cpp.lua`, but **blink.cmp is the default** (`vim.g.completion_engine = "blink"`), so `nvim-cmp` isn't actually installed unless you flip that flag.
 
 ### 🎨 Syntax / Treesitter
 
-| Plugin                                            | Description                                                               |
-| ------------------------------------------------- | ------------------------------------------------------------------------- |
+| Plugin                                            | Description                                                                |
+| ---------------------------------------------------- | -------------------------------------------------------------------------------- |
 | **`nvim-treesitter/nvim-treesitter`**             | Syntax highlighting, indentation, folding.                                |
 | **`nvim-treesitter/nvim-treesitter-textobjects`** | Text objects for functions, loops, etc.                                   |
-| **`JoosepAlviste/nvim-ts-context-commentstring`** | Context-aware comment strings for mixed languages (used by Comment.nvim). |
+| **`windwp/nvim-ts-autotag`**                      | Auto-close/rename matching JSX/TSX/HTML tags — a big win for React/Next.js. |
+| **`folke/ts-comments.nvim`**                      | Correct comment strings in embedded/mixed languages (JSX, Vue, etc.).     |
 
 ### 💬 Commenting
 
-| Plugin                                            | Description                                                    |
-| ------------------------------------------------- | -------------------------------------------------------------- |
-| **`numToStr/Comment.nvim`**                       | Line/block commenting plugin (with `<leader>c/` mapping).      |
-| **`JoosepAlviste/nvim-ts-context-commentstring`** | (Integrated) detects correct comment syntax for JSX, TSX, etc. |
+| Plugin                        | Description                                                |
+| -------------------------------- | -------------------------------------------------------------- |
+| **`numToStr/Comment.nvim`**   | Line/block commenting plugin (`<C-_>`, `<leader>c/`, `gc`). |
+| **`folke/ts-comments.nvim`**  | Treesitter-aware comment strings feeding `Comment.nvim`.   |
 
 ### 🚧 Diagnostics / Errors / TODOs
 
-| Plugin                         | Description                                                      |
-| ------------------------------ | ---------------------------------------------------------------- |
-| **`folke/trouble.nvim`**       | VSCode-like “Problems” list for diagnostics, refs, symbols.      |
-| **`folke/todo-comments.nvim`** | Highlights and lists `TODO`, `FIXME`, `NOTE`, etc. in your code. |
+| Plugin                          | Description                                                             |
+| ---------------------------------- | ----------------------------------------------------------------------------- |
+| **`folke/trouble.nvim`**        | VSCode-like "Problems" list for diagnostics, refs, symbols (`<F12>`).   |
+| **`folke/todo-comments.nvim`**  | Highlights and lists `TODO`, `FIXME`, `NOTE`, etc. in your code.        |
+| **`mfussenegger/nvim-lint`**    | Linter manager (clang-tidy, eslint, golangci-lint, dart analyze).       |
 
 ### 🧱 Build / Run / Debug
 
-| Plugin                          | Description                                                                 |
-| ------------------------------- | --------------------------------------------------------------------------- |
-| **`Civitasv/cmake-tools.nvim`** | Integrates CMake with Neovim (build, run, debug).                           |
-| **`mfussenegger/nvim-dap`**     | Core Debug Adapter Protocol implementation.                                 |
-| **`rcarriga/nvim-dap-ui`**      | Debugger side panels (variables, stack, breakpoints).                       |
-| **`nvim-neotest/nvim-nio`**     | Needed for DAP-UI async handling.                                           |
-| **`williamboman/mason.nvim`**   | Also used to install adapters like `codelldb`, `js-debug-adapter`, `delve`. |
+| Plugin                          | Description                                                                     |
+| ---------------------------------- | -------------------------------------------------------------------------------------- |
+| **`Civitasv/cmake-tools.nvim`** | Integrates CMake with Neovim (build, run, debug) — see `lua/plugins/cpp.lua`.        |
+| **`mfussenegger/nvim-dap`**     | Core Debug Adapter Protocol implementation.                                          |
+| **`rcarriga/nvim-dap-ui`**      | Debugger side panels (variables, stack, breakpoints).                                |
+| **`leoluz/nvim-dap-go`**        | Go DAP integration (delve), installed via the `lang.go` extra.                       |
+| **`nvim-neotest/nvim-nio`**     | Async library required by `nvim-dap-ui`.                                             |
 
 ### 🧩 Language-Specific Plugins
 
-| Language                 | Plugin(s)                                                         |
-| ------------------------ | ----------------------------------------------------------------- |
-| **C/C++**                | `p00f/clangd_extensions.nvim` (optional), uses `clangd` via Mason |
-| **Go**                   | `ray-x/go.nvim`, `ray-x/guihua.lua`, `leoluz/nvim-dap-go`         |
-| **Dart / Flutter**       | `akinsho/flutter-tools.nvim` (auto DAP integration)               |
-| **TypeScript / Node.js** | `pmizio/typescript-tools.nvim`, `mxsdev/nvim-dap-vscode-js`       |
+| Language                                       | Plugin(s)                                                                                                  | Config file(s)                                                          |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| **C / C++**                                    | `clangd` + `clangd_extensions.nvim` (inlay hints, AST, symbol info), `cmake-tools.nvim`, `codelldb` DAP    | `lua/plugins/cpp.lua`, `lua/plugins/dap.lua`                            |
+| **Go**                                         | `gopls`, `fatih/vim-go` (build/test/run helpers), `delve` + `nvim-dap-go` DAP, `.env`-aware debug configs  | `lua/plugins/gopls.lua`, `lua/plugins/golang.lua`, `lua/plugins/dap.lua` |
+| **Dart / Flutter**                             | `dartls`, `akinsho/flutter-tools.nvim` (auto DAP integration, dev log, widget guides)                      | `lua/plugins/dartls.lua`, `lua/plugins/flutter.lua`                     |
+| **TypeScript / JavaScript / React / Next.js**  | `ts_ls`, `eslint`, `tailwindcss` LSP, `nvim-ts-autotag` (JSX/TSX tags), `js-debug-adapter` DAP              | `lua/plugins/ts_ls.lua`, `lua/plugins/eslint.lua`, `lua/plugins/tailwindcss.lua`, `lua/plugins/dap.lua` |
 
 ### 🧰 Formatting & Linting
 
-| Plugin                       | Description                                                 |
-| ---------------------------- | ----------------------------------------------------------- |
-| **`stevearc/conform.nvim`**  | Formatter manager (clang-format, prettier, goimports, etc.) |
-| **`mfussenegger/nvim-lint`** | Linter manager (clang-tidy, eslint, golangci-lint).         |
+| Plugin                       | Description                                                        |
+| ------------------------------- | ----------------------------------------------------------------------- |
+| **`stevearc/conform.nvim`**  | Formatter manager (`clang-format`, `prettier`, `goimports`, etc.). |
+| **`mfussenegger/nvim-lint`** | Linter manager (`clang-tidy`, `eslint`, `golangci-lint`).           |
 
-### 🧑‍💻 Utilities / Extra
+### 🤖 AI Assistants
 
-| Plugin                             | Description                                    |
-| ---------------------------------- | ---------------------------------------------- |
-| **`mbbill/undotree`**              | Visual undo tree viewer.                       |
-| **`stevearc/overseer.nvim`**       | Task runner (build/test/run commands).         |
-| **`aznhe21/actions-preview.nvim`** | Previews code actions before applying.         |
-| **`smjonas/inc-rename.nvim`**      | Inline rename UI for symbols.                  |
-| **`stevearc/aerial.nvim`**         | Symbols outline (like CLion’s structure view). |
+| Plugin                              | Description                                                                     |
+| --------------------------------------- | ------------------------------------------------------------------------------------ |
+| **`olimorris/codecompanion.nvim`**  | Chat/inline-edit/actions AI assistant — the only AI chat plugin now, wired to a local Ollama model (`qwen2.5-coder:14b` by default, see `lua/plugins/codecompanion.lua`). |
 
-### From Your Keymaps.lua Customizations
+> `NickvanDyke/opencode.nvim` was removed — it drove the external `opencode` CLI, which has no local-model config and would default to cloud providers, and having two overlapping AI chat plugins was redundant now that the workflow is local-only. GitHub Copilot (`zbirenbaum/copilot.lua`, `blink-copilot`) stays installed via the `ai.copilot` extra but is explicitly disabled in `lua/plugins/ai-coding.lua` — also cloud-based, so it's off by default.
 
-| Added Feature                            | Plugin Used                         |
-| ---------------------------------------- | ----------------------------------- |
-| Copy/Cut/Paste keymaps                   | Native (`<C-c>`, `<C-x>`, `<C-v>`)  |
-| System clipboard support                 | `vim.opt.clipboard = 'unnamedplus'` |
-| Alt + v for block select                 | Manual mapping                      |
-| Clear search highlight (`Space + u + r`) | LazyVim default                     |
-| Toggle numbers / wrap / format           | LazyVim default mappings            |
+See the **AI Code Assistant** section in the Key Helper — CodeCompanion's keymaps live under the `<leader>c*` prefix, shared with clangd and CMake.
+
+### 🧑‍💻 Custom Keymaps (not tied to a specific plugin)
+
+| Added Feature                            | Source                                                                |
+| ------------------------------------------- | -------------------------------------------------------------------------- |
+| Copy/Cut/Paste keymaps                   | `<C-c>` / `<C-x>` / `<C-v>` in `lua/config/keymaps.lua`               |
+| System clipboard support                 | `vim.opt.clipboard = 'unnamedplus'`                                   |
+| Alt + v for block select                 | Manual mapping                                                        |
+| Ctrl+Z / Ctrl+Y undo-redo                | Manual mapping                                                        |
+| Ctrl+P / Ctrl+F find files / live grep   | Telescope, mapped directly (in addition to `<leader>ff` / `<leader>/`) |
+| Toggle numbers / wrap / format           | LazyVim default mappings                                              |
+
+## 🐞 Go Debugging with `.env` files
+
+Standard `dlv`/DAP launches don't read your shell environment or a `.env` file, which breaks anything reading config via `os.Getenv`. `lua/plugins/dap.lua` adds three extra Go debug configurations that load a `.env` file **at launch time**:
+
+* **Debug (.env)** — debug the current file (`${file}`) with `.env` variables injected.
+* **Debug package (.env)** — debug the package containing the current file (`${fileDirname}`).
+* **Debug test (.env)** — run `dlv test` on the current package with `.env` variables injected.
+
+**How to use it:**
+1. Press **F5** in a `.go` buffer (`dap.continue()`).
+2. Since there's more than one Go configuration available, a picker pops up — choose one of the `(.env)` entries.
+3. The `.env` file is located by starting at the debugged file's directory and walking upward to the nearest `go.mod` or `.git`, then parsed as `KEY=VALUE` lines (surrounding quotes and `#` comments are stripped) and passed to Delve as extra process environment.
+
+No extra plugin or dependency is required — it's a small parser inside `lua/plugins/dap.lua`. If no `.env` is found at the resolved project root you'll get a `WARN` notification and the process still launches (with nothing extra injected). The plain **Debug** entry (no `.env`) is still available when you don't want env injection.
+
+## 🎨 Themes
+
+Press **`<leader>ut`** (Space, then **u**, then **t**) to open the `themery.nvim` picker — arrow through the list for a live preview, **Enter** to apply. All colorscheme plugins are installed lazily, so nothing loads until you pick it. Most entries come in a light/dark pair.
+
+<details>
+<summary>All 45 colorscheme families (66 variants) — click to expand</summary>
+
+Everforest · Tokyo Night · Catppuccin · Kanagawa · Nightfox / Dayfox · GitHub · Rosé Pine · Gruvbox · Gruvbox Material · Gruvbox Baby · OneDark Pro · One Dark (navarasu) · Material · Ayu · Nightfly · Moonfly · Dracula · Nord (shaunsingh) · Nordic · Sonokai · Edge · Moonlight · VSCode · Melange · Zenbones / Zenwritten · Doom One · Tokyodark · One Monokai · Monokai · Monokai Nightasty · Solarized · Modus Vivendi / Operandi · Bamboo · Cyberdream · Nightcity · Poimandres · Adwaita · Night Owl · Onenord · Palenight · Arctic · Everblush · Mellifluous · Fluoromachine · Evergarden
+
+</details>
+
+Themes (and their plugin dependencies) are added/removed in `lua/plugins/themery.lua` — each entry needs both an item in the `themes` table **and** a matching plugin in the `dependencies` list; removing only one half leaves a broken/orphaned picker entry (`Oxocarbon` was one such orphan and has been removed).
+
+## 🔧 Git
+
+Git tooling is confirmed working: `git` (2.55) and `lazygit` are on system `PATH`, and `gitui` is installed by Mason (`util.gitui` extra, `ensure_installed = { "gitui" }`) and reachable on Neovim's runtime `PATH` even without a shell rc change.
+
+The `util.gitui` extra **replaces** LazyVim's default Lazygit keys with GitUI, and removes two file/log-history keys in favor of it:
+
+| Key | Action |
+| --- | --- |
+| `<leader>gg` | Open **GitUI** at the project root |
+| `<leader>gG` | Open **GitUI** at the current working directory |
+| `<leader>gL` | Git log (cwd) |
+| `<leader>gb` | Git blame line (picker) |
+| `<leader>gB` | Git browse (open remote in browser) |
+| `<leader>gY` | Copy git-permalink for selection/line |
+
+Plus the usual `gitsigns.nvim` hunk keys (unaffected by the extra) — see the Key Helper's Git section.
 
 
 
@@ -319,5 +378,7 @@ The latest version lives here → [`Neovim_Key_Helper.md`](./Neovim_Key_Helper.m
 * **`fd` not found** → on Ubuntu/Fedora the binary is `fdfind`; the README includes a symlink step.
 * **LSP not working for C++** → make sure `compile_commands.json` exists (CMake configure step), and `clangd` is installed via Mason.
 * **Debugger doesn’t start** → install `codelldb` (Mason) and make sure your program is built with **Debug** (`-g`).
+* **Go debug `.env` not applied** → check the `WARN` notification for the path it searched; the file must be named exactly `.env` and sit at (or above) the nearest `go.mod`/`.git` to the file you're debugging.
+* **`<leader>c...` does something unexpected** → that prefix is shared by clangd (buffer-local, C/C++ files only), CMake, and CodeCompanion; buffer-local mappings win inside a `.cpp`/`.h` buffer, otherwise the last-loaded plugin's global mapping wins. Check `lua/plugins/cpp.lua`, `lua/plugins/codecompanion.lua` if a key doesn't do what you expect.
 * **PATH issues** → ensure `~/.local/share/nvim/mason/bin` (Linux) or `%USERPROFILE%\AppData\Local\nvim-data\mason\bin` (Windows) is on PATH.
 

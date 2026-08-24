@@ -94,17 +94,6 @@ return {
         colorscheme = "rose-pine-dawn",
         before = [[pcall(function() require("rose-pine").setup({}) end); vim.o.background="light"]],
       },
-      -- Oxocarbon (same scheme, switch by background)
-      {
-        name = "Oxocarbon (Dark)",
-        colorscheme = "oxocarbon",
-        before = [[vim.o.background="dark"]],
-      },
-      {
-        name = "Oxocarbon (Light)",
-        colorscheme = "oxocarbon",
-        before = [[vim.o.background="light"]],
-      },
       -- Gruvbox (one scheme, switch by background)
       {
         name = "Gruvbox (Dark)",
@@ -441,7 +430,6 @@ return {
                   { "EdenEast/nightfox.nvim", lazy = true },
                   { "projekt0n/github-nvim-theme", lazy = true },
                   { "rose-pine/neovim", name = "rose-pine", lazy = true },
-                  { "nyoom-engineering/oxocarbon.nvim", lazy = true },
                   { "ellisonleao/gruvbox.nvim", lazy = true },
                   { "olimorris/onedarkpro.nvim", lazy = true },
                   { "marko-cerovac/material.nvim", lazy = true },

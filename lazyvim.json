@@ -4,6 +4,7 @@
     "lazyvim.plugins.extras.coding.yanky",
     "lazyvim.plugins.extras.lang.clangd",
     "lazyvim.plugins.extras.lang.cmake",
+    "lazyvim.plugins.extras.lang.dart",
     "lazyvim.plugins.extras.lang.ember",
     "lazyvim.plugins.extras.lang.git",
     "lazyvim.plugins.extras.lang.go",
