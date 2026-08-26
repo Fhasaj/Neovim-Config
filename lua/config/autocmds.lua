@@ -1,8 +1,24 @@
--- Autocmds are automatically loaded on the VeryLazy event
--- Default autocmds that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua
---
--- Add any additional autocmds here
--- with `vim.api.nvim_create_autocmd`
---
--- Or remove existing autocmds by their group name (which is prefixed with `lazyvim_` for the defaults)
--- e.g. vim.api.nvim_del_augroup_by_name("lazyvim_wrap_spell")
+-- Autocmds are loaded on the VeryLazy event.
+-- LazyVim's defaults: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua
+
+local augroup = vim.api.nvim_create_augroup("user", { clear = true })
+
+-- Terminal buffers: no line numbers, and start in insert mode like an
+-- integrated terminal panel would.
+vim.api.nvim_create_autocmd("TermOpen", {
+  group = augroup,
+  callback = function()
+    vim.opt_local.number = false
+    vim.opt_local.relativenumber = false
+    vim.opt_local.signcolumn = "no"
+    vim.cmd("startinsert")
+  end,
+  desc = "Terminal buffers behave like a terminal panel",
+})
+
+-- Keep splits proportional when the outer window is resized.
+vim.api.nvim_create_autocmd("VimResized", {
+  group = augroup,
+  command = "tabdo wincmd =",
+  desc = "Equalize splits on resize",
+})

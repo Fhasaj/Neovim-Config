@@ -1,6 +1,6 @@
 # skypin Backend in Neovim — GoLand equivalents
 
-Leader is `<Space>`. `<leader>g` = git, `<leader>G` = Go, `<leader>d` = debug/db, `<leader>o` = tasks.
+Leader is `<Space>`. `<leader>g` = git, `<leader>G` = Go, `<leader>d` = debug, `<leader>o` = tasks.
 
 ## Code intelligence (gopls)
 | GoLand | Neovim |
@@ -47,11 +47,7 @@ Pick these configurations at `<F5>`:
 
 Variable values appear inline next to the code.
 
-## Database & Redis (`<leader>D`) — GoLand Database tool window
-`<leader>D` toggle DBUI · `<leader>dA` add connection · `<leader>df` find buffer
-`<leader>dR` interactive `redis-cli` for the current service
-
-Connections are read from the services' env files at startup (`DATABASE_URL`,
-`REDIS_URL`) — credentials stay in `local.env` and are never stored in the config.
-In DBUI: `o` open, `S` execute query, `R` refresh. SQL buffers get schema-aware
-completion.
+## Removed
+The dadbod database/Redis integration that used to live under `<leader>D` was
+dropped in the 2026-08 config rebuild. `lua/util/dotenv.lua` still parses
+`DATABASE_URL` / `REDIS_URL`, so it can be re-added from the `linux` branch.

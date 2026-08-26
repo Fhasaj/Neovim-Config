@@ -9,10 +9,10 @@ return {
     ft = { "go", "gomod", "gowork", "gotmpl" },
     build = ':lua require("go.install").update_all_sync()',
     opts = {
-      lsp_cfg = false,        -- LazyVim/nvim-lspconfig owns gopls
+      lsp_cfg = false, -- LazyVim/nvim-lspconfig owns gopls
       lsp_keymaps = false,
       lsp_inlay_hints = { enable = false }, -- LazyVim toggles these (<leader>uh)
-      dap_debug = false,      -- nvim-dap-go owns the Go adapter
+      dap_debug = false, -- nvim-dap-go owns the Go adapter
       trouble = true,
       luasnip = false,
     },

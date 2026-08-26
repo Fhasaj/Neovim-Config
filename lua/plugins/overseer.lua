@@ -18,11 +18,18 @@ return {
 
     local dotenv = require("util.dotenv")
     local ok, services = pcall(dotenv.services)
-    if not ok then return end
+    if not ok then
+      return
+    end
 
     for _, svc in ipairs(services) do
       local defs = {
-        { suffix = "run", label = "run", cmd = vim.list_extend({ "go", "run", svc.main }, dotenv.serve_args(svc.dir)), env = true },
+        {
+          suffix = "run",
+          label = "run",
+          cmd = vim.list_extend({ "go", "run", svc.main }, dotenv.serve_args(svc.dir)),
+          env = true,
+        },
         { suffix = "build", label = "build", cmd = { "go", "build", "-o", "bin/" .. svc.name, svc.main } },
         { suffix = "test", label = "test", cmd = { "go", "test", "./..." }, env = true },
         { suffix = "vet", label = "vet", cmd = { "go", "vet", "./..." } },
@@ -40,7 +47,11 @@ return {
               components = { "default" },
             }
           end,
-          condition = { callback = function() return vim.uv.fs_stat(svc.dir) ~= nil end },
+          condition = {
+            callback = function()
+              return vim.uv.fs_stat(svc.dir) ~= nil
+            end,
+          },
         })
       end
     end

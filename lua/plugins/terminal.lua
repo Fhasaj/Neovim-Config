@@ -1,4 +1,12 @@
--- Terminal. Also provides the "just run the service with its env file" path,
+-- Integrated terminal.
+--
+--   <C-\>        toggle the floating terminal (VS Code's Ctrl+`)
+--   <leader>th   horizontal split terminal
+--   <leader>tv   vertical split terminal
+--   <leader>tf   floating terminal
+--   <Esc><Esc>   leave terminal insert mode (see lua/config/keymaps.lua)
+--
+-- It also provides the "just run the service with its env file" path,
 -- which is the plain `go run` equivalent of GoLand's green Run button (as
 -- opposed to <leader>or, which runs it as a managed task with an output pane).
 local function run_service(pick)
@@ -33,7 +41,9 @@ local function run_service(pick)
         return ("%-14s %s"):format(s.name, s.env_file and vim.fn.fnamemodify(s.env_file, ":t") or "no env file")
       end,
     }, function(choice)
-      if choice then launch(choice) end
+      if choice then
+        launch(choice)
+      end
     end)
   else
     local dir = dotenv.service_root()
@@ -50,8 +60,27 @@ return {
   version = "*",
   event = "VeryLazy",
   keys = {
-    { "<leader>Gr", function() run_service(false) end, desc = "Run current service (env file)" },
-    { "<leader>GR", function() run_service(true) end, desc = "Run a service…(pick)" },
+    { "<leader>t", "", desc = "+terminal" },
+    { "<leader>tf", "<cmd>ToggleTerm direction=float<cr>", desc = "Terminal (float)" },
+    { "<leader>th", "<cmd>ToggleTerm direction=horizontal size=15<cr>", desc = "Terminal (horizontal)" },
+    { "<leader>tv", "<cmd>ToggleTerm direction=vertical size=80<cr>", desc = "Terminal (vertical)" },
+    -- Some terminal emulators do not send Ctrl+` at all; <C-\> (open_mapping
+    -- below) is the reliable one, this is a convenience for those that do.
+    { "<C-`>", "<cmd>ToggleTerm<cr>", mode = { "n", "t" }, desc = "Toggle terminal" },
+    {
+      "<leader>Gr",
+      function()
+        run_service(false)
+      end,
+      desc = "Run current service (env file)",
+    },
+    {
+      "<leader>GR",
+      function()
+        run_service(true)
+      end,
+      desc = "Run a service…(pick)",
+    },
   },
   opts = {
     size = 15,

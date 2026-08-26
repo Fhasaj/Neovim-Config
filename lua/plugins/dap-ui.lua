@@ -3,8 +3,21 @@ return {
     "rcarriga/nvim-dap-ui",
     dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
     keys = {
-      { "<leader>du", function() require("dapui").toggle() end, desc = "DAP UI Toggle" },
-      { "<leader>de", function() require("dapui").eval() end, mode = { "n", "v" }, desc = "DAP Eval" },
+      {
+        "<leader>du",
+        function()
+          require("dapui").toggle()
+        end,
+        desc = "DAP UI Toggle",
+      },
+      {
+        "<leader>de",
+        function()
+          require("dapui").eval()
+        end,
+        mode = { "n", "v" },
+        desc = "DAP Eval",
+      },
     },
     opts = {
       layouts = {
@@ -24,9 +37,15 @@ return {
     config = function(_, opts)
       local dap, dapui = require("dap"), require("dapui")
       dapui.setup(opts)
-      dap.listeners.after.event_initialized["dapui"] = function() dapui.open({}) end
-      dap.listeners.before.event_terminated["dapui"] = function() dapui.close({}) end
-      dap.listeners.before.event_exited["dapui"] = function() dapui.close({}) end
+      dap.listeners.after.event_initialized["dapui"] = function()
+        dapui.open({})
+      end
+      dap.listeners.before.event_terminated["dapui"] = function()
+        dapui.close({})
+      end
+      dap.listeners.before.event_exited["dapui"] = function()
+        dapui.close({})
+      end
     end,
   },
   -- Inline variable values next to the code, like GoLand's debugger.

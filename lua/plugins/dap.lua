@@ -23,19 +23,37 @@ return {
     vim.fn.sign_define("DapStopped", { text = "▶", texthl = "DiagnosticSignInfo" })
 
     local map = vim.keymap.set
-    map("n", "<F5>", function() dap.continue() end, { desc = "DAP Continue/Start" })
-    map("n", "<F9>", function() dap.toggle_breakpoint() end, { desc = "DAP Toggle Breakpoint" })
-    map("n", "<F10>", function() dap.step_over() end, { desc = "DAP Step Over" })
-    map("n", "<F11>", function() dap.step_into() end, { desc = "DAP Step Into" })
-    map("n", "<S-F11>", function() dap.step_out() end, { desc = "DAP Step Out" })
-    map("n", "<leader>db", function() dap.toggle_breakpoint() end, { desc = "DAP Toggle Breakpoint" })
+    map("n", "<F5>", function()
+      dap.continue()
+    end, { desc = "DAP Continue/Start" })
+    map("n", "<F9>", function()
+      dap.toggle_breakpoint()
+    end, { desc = "DAP Toggle Breakpoint" })
+    map("n", "<F10>", function()
+      dap.step_over()
+    end, { desc = "DAP Step Over" })
+    map("n", "<F11>", function()
+      dap.step_into()
+    end, { desc = "DAP Step Into" })
+    map("n", "<S-F11>", function()
+      dap.step_out()
+    end, { desc = "DAP Step Out" })
+    map("n", "<leader>db", function()
+      dap.toggle_breakpoint()
+    end, { desc = "DAP Toggle Breakpoint" })
     map("n", "<leader>dB", function()
       vim.ui.input({ prompt = "Breakpoint condition: " }, function(c)
-        if c then dap.set_breakpoint(c) end
+        if c then
+          dap.set_breakpoint(c)
+        end
       end)
     end, { desc = "DAP Conditional Breakpoint" })
-    map("n", "<leader>dr", function() dap.repl.toggle() end, { desc = "DAP REPL" })
-    map("n", "<leader>dx", function() dap.terminate() end, { desc = "DAP Terminate" })
+    map("n", "<leader>dr", function()
+      dap.repl.toggle()
+    end, { desc = "DAP REPL" })
+    map("n", "<leader>dx", function()
+      dap.terminate()
+    end, { desc = "DAP Terminate" })
 
     local mason = vim.fn.stdpath("data") .. "/mason/packages"
 
@@ -73,8 +91,20 @@ return {
       }
       for _, ft in ipairs({ "typescript", "javascript", "typescriptreact", "javascriptreact" }) do
         dap.configurations[ft] = {
-          { type = "pwa-node", request = "launch", name = "Launch file", program = "${file}", cwd = "${workspaceFolder}" },
-          { type = "pwa-node", request = "attach", name = "Attach", processId = require("dap.utils").pick_process, cwd = "${workspaceFolder}" },
+          {
+            type = "pwa-node",
+            request = "launch",
+            name = "Launch file",
+            program = "${file}",
+            cwd = "${workspaceFolder}",
+          },
+          {
+            type = "pwa-node",
+            request = "attach",
+            name = "Attach",
+            processId = require("dap.utils").pick_process,
+            cwd = "${workspaceFolder}",
+          },
         }
       end
     end
@@ -87,7 +117,10 @@ return {
       local path = dotenv.find(root)
       local env = dotenv.merged(root)
       if not path then
-        vim.notify(("no env file in %s (looked for %s)"):format(root, table.concat(dotenv.candidates, ", ")), vim.log.levels.WARN)
+        vim.notify(
+          ("no env file in %s (looked for %s)"):format(root, table.concat(dotenv.candidates, ", ")),
+          vim.log.levels.WARN
+        )
       else
         vim.notify("debug env: " .. vim.fn.fnamemodify(path, ":~"), vim.log.levels.INFO)
       end
@@ -129,9 +162,15 @@ return {
             type = "go",
             name = "Debug service (env file)",
             request = "launch",
-            program = function() return dotenv.service_root() .. "/cmd/server" end,
-            cwd = function() return dotenv.service_root() end,
-            args = function() return dotenv.serve_args(dotenv.service_root()) end,
+            program = function()
+              return dotenv.service_root() .. "/cmd/server"
+            end,
+            cwd = function()
+              return dotenv.service_root()
+            end,
+            args = function()
+              return dotenv.serve_args(dotenv.service_root())
+            end,
             env = env_for_current_buffer,
           },
           {
@@ -139,7 +178,9 @@ return {
             name = "Debug package (env file)",
             request = "launch",
             program = "${fileDirname}",
-            cwd = function() return dotenv.service_root() end,
+            cwd = function()
+              return dotenv.service_root()
+            end,
             env = env_for_current_buffer,
           },
           {

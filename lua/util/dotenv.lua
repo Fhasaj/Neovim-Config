@@ -8,7 +8,9 @@ M.candidates = { "local.env", ".env.local", ".env" }
 -- Directory of the Go module owning `path` (defaults to the current buffer).
 function M.service_root(path)
   local start = path or vim.fn.expand("%:p:h")
-  if start == "" then start = vim.fn.getcwd() end
+  if start == "" then
+    start = vim.fn.getcwd()
+  end
   local found = vim.fs.find({ "go.mod" }, { upward = true, path = start })
   return found[1] and vim.fs.dirname(found[1]) or vim.fn.getcwd()
 end
@@ -18,7 +20,9 @@ function M.find(dir)
   dir = dir or M.service_root()
   for _, name in ipairs(M.candidates) do
     local p = dir .. "/" .. name
-    if vim.uv.fs_stat(p) then return p end
+    if vim.uv.fs_stat(p) then
+      return p
+    end
   end
   return nil
 end
@@ -28,7 +32,9 @@ end
 function M.parse(path)
   local env = {}
   local f = io.open(path, "r")
-  if not f then return env end
+  if not f then
+    return env
+  end
   for line in f:lines() do
     line = line:match("^%s*(.-)%s*$")
     if line ~= "" and not line:match("^#") then
@@ -75,14 +81,18 @@ end
 -- than looking like the debugger silently did nothing.
 function M.serve_args(dir)
   local cmd = dir .. "/cmd/server"
-  if not vim.uv.fs_stat(cmd) then return {} end
+  if not vim.uv.fs_stat(cmd) then
+    return {}
+  end
   for name, t in vim.fs.dir(cmd) do
     if t == "file" and name:match("%.go$") then
       local f = io.open(cmd .. "/" .. name, "r")
       if f then
         local body = f:read("*a")
         f:close()
-        if body:match('Use:%s*"serve"') then return { "serve" } end
+        if body:match('Use:%s*"serve"') then
+          return { "serve" }
+        end
       end
     end
   end
@@ -93,14 +103,18 @@ end
 -- username is sent literally and the server answers WRONGPASS. go-redis accepts
 -- it, which is why the services connect but the CLI/GUI do not. Name the user.
 function M.normalize_redis_url(url)
-  if not url or url == "" then return url end
+  if not url or url == "" then
+    return url
+  end
   return (url:gsub("^(rediss?://):", "%1default:"))
 end
 
 -- Backend root = the directory holding the service checkouts.
 function M.backend_root()
   local marker = vim.fs.find({ "skypin-infra" }, { upward = true, path = vim.fn.getcwd(), type = "directory" })
-  if marker[1] then return vim.fs.dirname(marker[1]) end
+  if marker[1] then
+    return vim.fs.dirname(marker[1])
+  end
   return vim.fs.dirname(M.service_root())
 end
 
@@ -115,7 +129,9 @@ function M.services()
       table.insert(out, { name = name, dir = dir, main = main, env_file = M.find(dir) })
     end
   end
-  table.sort(out, function(a, b) return a.name < b.name end)
+  table.sort(out, function(a, b)
+    return a.name < b.name
+  end)
   return out
 end
 
